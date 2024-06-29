@@ -10,7 +10,7 @@
         android:id="@+id/imgViewPlayStopIcon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="230dp"
+        android:layout_marginBottom="100dp"
         android:src="@drawable/ic_stop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,4 +37,22 @@
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="@+id/seekBar"
         app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+
+    <ImageView
+        android:id="@+id/imgViewPreviousSongIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_back_arrow"
+        app:layout_constraintBottom_toBottomOf="@+id/imgViewPlayStopIcon"
+        app:layout_constraintStart_toStartOf="@+id/seekBar"
+        app:layout_constraintTop_toTopOf="@+id/imgViewPlayStopIcon" />
+
+    <ImageView
+        android:id="@+id/imgViewNextSongIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_next_arrow"
+        app:layout_constraintBottom_toBottomOf="@+id/imgViewPlayStopIcon"
+        app:layout_constraintEnd_toEndOf="@+id/txtViewRemindDuration"
+        app:layout_constraintTop_toTopOf="@+id/imgViewPlayStopIcon" />
 </androidx.constraintlayout.widget.ConstraintLayout>

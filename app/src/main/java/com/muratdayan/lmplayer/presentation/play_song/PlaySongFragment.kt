@@ -12,20 +12,21 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.muratdayan.lmplayer.R
 import com.muratdayan.lmplayer.databinding.FragmentPlaySongBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class PlaySongFragment : Fragment() {
 
     private var _binding: FragmentPlaySongBinding? = null
     private val binding get() = _binding!!
     private val args: PlaySongFragmentArgs by navArgs()
-    private val playSongViewModel : PlaySongViewModel by viewModels()
-
+    private val playSongViewModel: PlaySongViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View{
+    ): View {
         _binding = FragmentPlaySongBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -34,41 +35,48 @@ class PlaySongFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val song = args.song
+
         val songPosition = args.position
 
-        playSongViewModel.playSong(song.path)
+        playSongViewModel.getAllSongsAndInitialize(songPosition)
 
-        playSongViewModel.isPlaying.observe(viewLifecycleOwner){isPlaying->
-            if (isPlaying){
+        playSongViewModel.isPlaying.observe(viewLifecycleOwner) { isPlaying ->
+            if (isPlaying) {
                 binding.imgViewPlayStopIcon.setImageResource(R.drawable.ic_stop)
-            }else{
+            } else {
                 binding.imgViewPlayStopIcon.setImageResource(R.drawable.ic_play)
             }
         }
 
-        playSongViewModel.currentPosition.observe(viewLifecycleOwner){position->
+        playSongViewModel.currentPosition.observe(viewLifecycleOwner) { position ->
             binding.seekBar.progress = position
             binding.txtViewRemindDuration.text = formatTime(position)
         }
 
         playSongViewModel.duration.observe(viewLifecycleOwner) { duration ->
-
             binding.seekBar.max = duration
             binding.txtViewRemindDuration.text = formatTime(duration)
         }
 
-
         binding.imgViewPlayStopIcon.setOnClickListener {
-            if (playSongViewModel.isPlaying.value == true){
+            if (playSongViewModel.isPlaying.value == true) {
                 playSongViewModel.pauseSong()
-            }else{
-                playSongViewModel.playSong(song.path)
+            } else {
+                playSongViewModel.playOrPauseSong()
             }
         }
 
-        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+        binding.imgViewNextSongIcon.setOnClickListener {
+            playSongViewModel.playNextSong()
+        }
+
+        binding.imgViewPreviousSongIcon.setOnClickListener {
+            playSongViewModel.playPreviousSong()
+        }
+
+        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser){
+                if (fromUser) {
                     playSongViewModel.mediaPlayer?.seekTo(progress)
                 }
             }
@@ -82,8 +90,6 @@ class PlaySongFragment : Fragment() {
             }
 
         })
-
-
     }
 
     @SuppressLint("DefaultLocale")
@@ -93,12 +99,8 @@ class PlaySongFragment : Fragment() {
         return String.format("%d:%02d", minutes, seconds)
     }
 
-
-
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
-
-
 }

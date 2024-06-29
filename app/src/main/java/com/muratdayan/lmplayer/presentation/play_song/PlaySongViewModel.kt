@@ -6,12 +6,19 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.muratdayan.lmplayer.core.common.Resource
+import com.muratdayan.lmplayer.data.locale.entity.SongModel
+import com.muratdayan.lmplayer.domain.use_cases.GetAllSongsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.NonCancellable.start
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PlaySongViewModel @Inject constructor(
+    private val getAllSongsUseCase: GetAllSongsUseCase
 ): ViewModel() {
 
     private val _isPlaying = MutableLiveData<Boolean>()
@@ -26,6 +33,8 @@ class PlaySongViewModel @Inject constructor(
     var mediaPlayer: MediaPlayer? = null
     private var currentSongPath: String? = null
     private var currentSongPosition: Int = 0
+    private var songsList: List<SongModel> = emptyList()
+    private var currentSongIndex: Int = -1
 
     private val handler = Handler(Looper.getMainLooper())
     private val updateRunnable = object : Runnable {
@@ -39,31 +48,73 @@ class PlaySongViewModel @Inject constructor(
         }
     }
 
-
-    fun playSong(path: String) {
-        if (path != currentSongPath) {
-            stopSong() // Mevcut çalan şarkıyı durdur ve serbest bırak
-            currentSongPath = path
-            currentSongPosition = 0
-        }
-
-        if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer().apply {
-                setDataSource(path)
-                prepare()
-                seekTo(currentPosition)
-                start()
-                _duration.value = duration
-                handler.post(updateRunnable)
-                _isPlaying.value = true
-                setOnCompletionListener {
-                    _isPlaying.value = false
+    fun getAllSongsAndInitialize(initialSongIndex: Int) {
+        viewModelScope.launch {
+            getAllSongsUseCase().collect { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        songsList = result.data ?: emptyList()
+                        if (songsList.isNotEmpty()) {
+                            currentSongIndex = initialSongIndex
+                            currentSongPath = songsList[currentSongIndex].path
+                            initializeMediaPlayer()
+                        }
+                    }
+                    is Resource.Error -> {
+                        // Handle error if needed
+                    }
+                    is Resource.Loading -> {
+                        // Handle loading state if needed
+                    }
                 }
             }
-        } else {
-            mediaPlayer?.start()
+        }
+    }
+
+
+    private fun initializeMediaPlayer() {
+        mediaPlayer?.release()
+        mediaPlayer = MediaPlayer().apply {
+            setDataSource(currentSongPath)
+            prepare()
+            seekTo(currentSongPosition)
+            start()
+            _duration.value = duration
             handler.post(updateRunnable)
             _isPlaying.value = true
+            setOnCompletionListener {
+                playNextSong()
+            }
+        }
+    }
+
+    fun playNextSong() {
+        if (currentSongIndex < songsList.size - 1) {
+            currentSongIndex++
+        } else {
+            currentSongIndex = 0
+        }
+        currentSongPath = songsList[currentSongIndex].path
+        initializeMediaPlayer()
+    }
+
+    fun playPreviousSong() {
+        if (currentSongIndex > 0) {
+            currentSongIndex--
+        } else {
+            currentSongIndex = songsList.size - 1
+        }
+        currentSongPath = songsList[currentSongIndex].path
+        initializeMediaPlayer()
+    }
+
+    fun playOrPauseSong() {
+        if (mediaPlayer?.isPlaying == true) {
+            pauseSong()
+        } else {
+            mediaPlayer?.start()
+            _isPlaying.value = true
+            handler.post(updateRunnable)
         }
     }
 
