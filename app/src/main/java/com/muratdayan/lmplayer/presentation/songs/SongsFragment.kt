@@ -7,8 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.muratdayan.lmplayer.R
 import com.muratdayan.lmplayer.databinding.FragmentSongsBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class SongsFragment : Fragment() {
 
     private var _binding: FragmentSongsBinding? = null
