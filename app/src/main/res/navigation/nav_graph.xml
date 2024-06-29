@@ -9,10 +9,18 @@
         android:id="@+id/songsFragment"
         android:name="com.muratdayan.lmplayer.presentation.songs.SongsFragment"
         android:label="fragment_songs"
-        tools:layout="@layout/fragment_songs" />
+        tools:layout="@layout/fragment_songs" >
+        <action
+            android:id="@+id/navigate_songsFragment_to_playSongFragment"
+            app:destination="@id/playSongFragment" />
+    </fragment>
     <fragment
         android:id="@+id/playSongFragment"
         android:name="com.muratdayan.lmplayer.presentation.play_song.PlaySongFragment"
         android:label="fragment_play_song"
-        tools:layout="@layout/fragment_play_song" />
+        tools:layout="@layout/fragment_play_song" >
+        <argument
+            android:name="songPath"
+            app:argType="string" />
+    </fragment>
 </navigation>

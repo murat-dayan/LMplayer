@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.muratdayan.lmplayer.databinding.FragmentSongsBinding
 import com.muratdayan.lmplayer.presentation.adapters.SongsAdapter
@@ -66,7 +67,10 @@ class SongsFragment : Fragment() {
                         Toast.makeText(requireContext(),songState.error,Toast.LENGTH_SHORT).show()
                     }
                     songState.songs?.isNotEmpty() == true ->{
-                        binding.rvSongs.adapter = SongsAdapter(songState.songs)
+                        binding.rvSongs.adapter = SongsAdapter(songState.songs){song->
+                            val action = SongsFragmentDirections.navigateSongsFragmentToPlaySongFragment(song.path)
+                            findNavController().navigate(action)
+                        }
                     }
                 }
             }
