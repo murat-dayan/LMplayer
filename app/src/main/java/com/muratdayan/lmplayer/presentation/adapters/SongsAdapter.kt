@@ -11,7 +11,7 @@ import com.muratdayan.lmplayer.databinding.SongsRowBinding
 
 class SongsAdapter(
     private val songs: List<SongModel>,
-    private val onItemClicked: (SongModel) -> Unit
+    private val onItemClicked: (SongModel, Int) -> Unit
 ): RecyclerView.Adapter<SongsAdapter.SongsRowHolder>()  {
 
     inner class SongsRowHolder(itemView: View): RecyclerView.ViewHolder(itemView){
@@ -33,7 +33,7 @@ class SongsAdapter(
         holder.binding.apply {
             txtViewSongsRowTitle.text = song.title
             cvSongsRow.setOnClickListener {
-                onItemClicked(song)
+                onItemClicked(song,position)
             }
         }
     }

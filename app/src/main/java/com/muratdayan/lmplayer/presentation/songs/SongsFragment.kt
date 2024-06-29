@@ -67,8 +67,8 @@ class SongsFragment : Fragment() {
                         Toast.makeText(requireContext(),songState.error,Toast.LENGTH_SHORT).show()
                     }
                     songState.songs?.isNotEmpty() == true ->{
-                        binding.rvSongs.adapter = SongsAdapter(songState.songs){song->
-                            val action = SongsFragmentDirections.navigateSongsFragmentToPlaySongFragment(song.path)
+                        binding.rvSongs.adapter = SongsAdapter(songState.songs){song,position->
+                            val action = SongsFragmentDirections.navigateSongsFragmentToPlaySongFragment(song = song,position)
                             findNavController().navigate(action)
                         }
                     }

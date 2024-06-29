@@ -1,11 +1,13 @@
 package com.muratdayan.lmplayer.presentation.play_song
 
+import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.muratdayan.lmplayer.R
@@ -31,9 +33,10 @@ class PlaySongFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var songPath = args.songPath
+        val song = args.song
+        val songPosition = args.position
 
-        playSongViewModel.playSong(songPath)
+        playSongViewModel.playSong(song.path)
 
         playSongViewModel.isPlaying.observe(viewLifecycleOwner){isPlaying->
             if (isPlaying){
@@ -43,13 +46,51 @@ class PlaySongFragment : Fragment() {
             }
         }
 
+        playSongViewModel.currentPosition.observe(viewLifecycleOwner){position->
+            binding.seekBar.progress = position
+            binding.txtViewRemindDuration.text = formatTime(position)
+        }
+
+        playSongViewModel.duration.observe(viewLifecycleOwner) { duration ->
+
+            binding.seekBar.max = duration
+            binding.txtViewRemindDuration.text = formatTime(duration)
+        }
+
+
         binding.imgViewPlayStopIcon.setOnClickListener {
             if (playSongViewModel.isPlaying.value == true){
                 playSongViewModel.pauseSong()
             }else{
-                playSongViewModel.playSong(songPath)
+                playSongViewModel.playSong(song.path)
             }
         }
+
+        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser){
+                    playSongViewModel.mediaPlayer?.seekTo(progress)
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // not needed
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                // not needed
+            }
+
+        })
+
+
+    }
+
+    @SuppressLint("DefaultLocale")
+    private fun formatTime(milliseconds: Int): String {
+        val minutes = milliseconds / 1000 / 60
+        val seconds = milliseconds / 1000 % 60
+        return String.format("%d:%02d", minutes, seconds)
     }
 
 

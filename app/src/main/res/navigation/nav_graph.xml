@@ -20,7 +20,10 @@
         android:label="fragment_play_song"
         tools:layout="@layout/fragment_play_song" >
         <argument
-            android:name="songPath"
-            app:argType="string" />
+            android:name="song"
+            app:argType="com.muratdayan.lmplayer.data.locale.entity.SongModel" />
+        <argument
+            android:name="position"
+            app:argType="integer" />
     </fragment>
 </navigation>

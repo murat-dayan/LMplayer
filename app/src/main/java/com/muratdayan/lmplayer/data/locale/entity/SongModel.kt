@@ -3,6 +3,7 @@ package com.muratdayan.lmplayer.data.locale.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "song_table")
 data class SongModel(
@@ -21,4 +22,4 @@ data class SongModel(
 
     @ColumnInfo(name = "song_duration")
     val duration: Long
-)
+) : Serializable
