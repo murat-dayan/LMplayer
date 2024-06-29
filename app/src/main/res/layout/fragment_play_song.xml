@@ -55,4 +55,17 @@
         app:layout_constraintBottom_toBottomOf="@+id/imgViewPlayStopIcon"
         app:layout_constraintEnd_toEndOf="@+id/txtViewRemindDuration"
         app:layout_constraintTop_toTopOf="@+id/imgViewPlayStopIcon" />
+
+    <TextView
+        android:id="@+id/txtViewSongTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toTopOf="@+id/seekBar"
+        app:layout_constraintEnd_toEndOf="@+id/seekBar"
+        app:layout_constraintStart_toStartOf="@+id/seekBar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

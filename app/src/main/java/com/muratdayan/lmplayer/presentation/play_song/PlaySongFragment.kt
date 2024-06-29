@@ -36,6 +36,8 @@ class PlaySongFragment : Fragment() {
 
         val song = args.song
 
+        binding.txtViewSongTitle.text = song.title
+
         val songPosition = args.position
 
         playSongViewModel.getAllSongsAndInitialize(songPosition)
@@ -57,6 +59,11 @@ class PlaySongFragment : Fragment() {
             binding.seekBar.max = duration
             binding.txtViewRemindDuration.text = formatTime(duration)
         }
+
+        playSongViewModel.currentSong.observe(viewLifecycleOwner) { currentSong ->
+            binding.txtViewSongTitle.text = currentSong.title
+        }
+
 
         binding.imgViewPlayStopIcon.setOnClickListener {
             if (playSongViewModel.isPlaying.value == true) {

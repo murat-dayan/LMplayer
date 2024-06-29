@@ -11,15 +11,13 @@ import com.muratdayan.lmplayer.core.common.Resource
 import com.muratdayan.lmplayer.data.locale.entity.SongModel
 import com.muratdayan.lmplayer.domain.use_cases.GetAllSongsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.NonCancellable.start
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PlaySongViewModel @Inject constructor(
     private val getAllSongsUseCase: GetAllSongsUseCase
-): ViewModel() {
+) : ViewModel() {
 
     private val _isPlaying = MutableLiveData<Boolean>()
     val isPlaying: LiveData<Boolean> get() = _isPlaying
@@ -29,6 +27,9 @@ class PlaySongViewModel @Inject constructor(
 
     private val _duration = MutableLiveData<Int>()
     val duration: LiveData<Int> get() = _duration
+
+    private val _currentSong = MutableLiveData<SongModel>()
+    val currentSong: LiveData<SongModel> get() = _currentSong
 
     var mediaPlayer: MediaPlayer? = null
     private var currentSongPath: String? = null
@@ -57,6 +58,7 @@ class PlaySongViewModel @Inject constructor(
                         if (songsList.isNotEmpty()) {
                             currentSongIndex = initialSongIndex
                             currentSongPath = songsList[currentSongIndex].path
+                            _currentSong.value = songsList[currentSongIndex]
                             initializeMediaPlayer()
                         }
                     }
@@ -70,7 +72,6 @@ class PlaySongViewModel @Inject constructor(
             }
         }
     }
-
 
     private fun initializeMediaPlayer() {
         mediaPlayer?.release()
@@ -95,6 +96,7 @@ class PlaySongViewModel @Inject constructor(
             currentSongIndex = 0
         }
         currentSongPath = songsList[currentSongIndex].path
+        _currentSong.value = songsList[currentSongIndex]
         initializeMediaPlayer()
     }
 
@@ -105,6 +107,7 @@ class PlaySongViewModel @Inject constructor(
             currentSongIndex = songsList.size - 1
         }
         currentSongPath = songsList[currentSongIndex].path
+        _currentSong.value = songsList[currentSongIndex]
         initializeMediaPlayer()
     }
 
