@@ -13,14 +13,14 @@ import kotlinx.coroutines.flow.Flow
 interface SongDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSong(song: SongModel) // SongEntity ile güncellendi
+    suspend fun insertSong(song: SongModel) : Long // SongEntity ile güncellendi
 
     @Update
-    suspend fun updateSong(song: SongModel) // SongEntity ile güncellendi
+    suspend fun updateSong(song: SongModel) : Int // SongEntity ile güncellendi
 
     @Delete
-    suspend fun deleteSong(song: SongModel) // SongEntity ile güncellendi
+    suspend fun deleteSong(song: SongModel) : Int // SongEntity ile güncellendi
 
     @Query("SELECT * FROM song_table")
-    fun getAllSongs(): Flow<List<SongModel>> // SongEntity ile güncellendi
+    suspend fun getAllSongs(): List<SongModel> // SongEntity ile güncellendi
 }
