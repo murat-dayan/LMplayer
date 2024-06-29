@@ -90,25 +90,25 @@ class PlaySongViewModel @Inject constructor(
     }
 
     fun playNextSong() {
-        if (currentSongIndex < songsList.size - 1) {
-            currentSongIndex++
-        } else {
-            currentSongIndex = 0
+        if (songsList.isNotEmpty()) {
+            currentSongIndex = (currentSongIndex + 1) % songsList.size
+            currentSongPath = songsList[currentSongIndex].path
+            _currentSong.value = songsList[currentSongIndex]
+            initializeMediaPlayer()
         }
-        currentSongPath = songsList[currentSongIndex].path
-        _currentSong.value = songsList[currentSongIndex]
-        initializeMediaPlayer()
     }
 
     fun playPreviousSong() {
-        if (currentSongIndex > 0) {
-            currentSongIndex--
-        } else {
-            currentSongIndex = songsList.size - 1
+        if (songsList.isNotEmpty()) {
+            currentSongIndex = if (currentSongIndex > 0) {
+                currentSongIndex - 1
+            } else {
+                songsList.size - 1
+            }
+            currentSongPath = songsList[currentSongIndex].path
+            _currentSong.value = songsList[currentSongIndex]
+            initializeMediaPlayer()
         }
-        currentSongPath = songsList[currentSongIndex].path
-        _currentSong.value = songsList[currentSongIndex]
-        initializeMediaPlayer()
     }
 
     fun playOrPauseSong() {

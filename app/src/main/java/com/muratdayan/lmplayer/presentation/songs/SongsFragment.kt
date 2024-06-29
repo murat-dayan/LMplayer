@@ -49,6 +49,10 @@ class SongsFragment : Fragment() {
         binding.rvSongs.setHasFixedSize(true)
         binding.rvSongs.layoutManager = LinearLayoutManager(requireContext())
 
+        binding.imgViewRefreshIcon.setOnClickListener {
+            songsViewModel.fetchAndSaveMp3Files()
+        }
+
         songsViewModel.permissionRequest.observe(viewLifecycleOwner) { request ->
             if (!request) {
                 requestStoragePermissions()

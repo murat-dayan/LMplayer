@@ -40,6 +40,8 @@ class SongsViewModel @Inject constructor(
     val songsState: StateFlow<SongsState>
         get() = _songsState
 
+    private var songsList: List<SongModel> = emptyList()
+
 
     fun checkPermissionAndFetchMp3Files() {
         _permissionRequest.value = true
@@ -107,6 +109,7 @@ class SongsViewModel @Inject constructor(
         getAllSongsUseCase().onEach { result->
             when(result){
                 is Resource.Success->{
+                    songsList = result.data ?: emptyList()
                     _songsState.value = SongsState(songs = result.data)
                 }
                 is Resource.Error-> {
@@ -118,5 +121,21 @@ class SongsViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
     }
+
+   /* fun checkForNewSongs() {
+        viewModelScope.launch {
+            // Burada cihazdaki mevcut şarkıları alabilirsiniz
+            _songsState.value.songs?.let { currentSongs ->
+
+                // Örneğin, mevcut şarkı listesi ile önceki listeyi karşılaştırabilirsiniz
+                if (!songsList.containsAll(currentSongs)) {
+                    // Yeni şarkılar eklenmişse veya var olan şarkılar değişmişse işlem yapabilirsiniz
+                    fetchAndSaveMp3Files()
+                }
+            }
+        }
+    }*/
+
+
 }
 
