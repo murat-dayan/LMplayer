@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlinAndroidKsp)
     alias(libs.plugins.hiltAndroid)
-    alias(libs.plugins.compose.compiler)
     id("androidx.navigation.safeargs.kotlin")
 }
 
