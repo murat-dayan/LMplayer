@@ -12,7 +12,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.muratdayan.lmplayer.databinding.FragmentSongsBinding
+import com.muratdayan.lmplayer.presentation.adapters.SongsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -43,6 +45,9 @@ class SongsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.rvSongs.setHasFixedSize(true)
+        binding.rvSongs.layoutManager = LinearLayoutManager(requireContext())
+
         songsViewModel.permissionRequest.observe(viewLifecycleOwner) { request ->
             if (!request) {
                 requestStoragePermissions()
@@ -61,7 +66,7 @@ class SongsFragment : Fragment() {
                         Toast.makeText(requireContext(),songState.error,Toast.LENGTH_SHORT).show()
                     }
                     songState.songs?.isNotEmpty() == true ->{
-                        println(songState.songs)
+                        binding.rvSongs.adapter = SongsAdapter(songState.songs)
                     }
                 }
             }
