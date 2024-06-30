@@ -68,4 +68,17 @@
         app:layout_constraintBottom_toTopOf="@+id/seekBar"
         app:layout_constraintEnd_toEndOf="@+id/seekBar"
         app:layout_constraintStart_toStartOf="@+id/seekBar" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_launcher_playstore"
+        app:layout_constraintBottom_toTopOf="@+id/txtViewSongTitle"
+        app:layout_constraintEnd_toEndOf="@+id/txtViewSongTitle"
+        app:layout_constraintStart_toStartOf="@+id/txtViewSongTitle"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
