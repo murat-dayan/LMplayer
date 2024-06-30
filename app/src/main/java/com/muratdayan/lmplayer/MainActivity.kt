@@ -1,5 +1,6 @@
 package com.muratdayan.lmplayer
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.muratdayan.lmplayer.databinding.ActivityMainBinding
+import com.muratdayan.lmplayer.presentation.service.MusicService
 import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -33,6 +35,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(binding.navHostFragContainer.id) as NavHostFragment
         navController = navHostFragment.findNavController()
 
-
     }
+
+
 }
