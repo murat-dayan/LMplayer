@@ -1,4 +1,4 @@
-package com.muratdayan.lmplayer.presentation.play_song
+package com.muratdayan.lmplayer.presentation
 
 import android.media.MediaPlayer
 import android.os.Handler
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PlaySongViewModel @Inject constructor(
+class SharedViewModel @Inject constructor(
     private val getAllSongsUseCase: GetAllSongsUseCase
 ) : ViewModel() {
 

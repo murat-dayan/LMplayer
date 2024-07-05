@@ -53,6 +53,7 @@ class SongsFragment : Fragment() {
         songsViewModel.permissionRequest.observe(viewLifecycleOwner) { request ->
             if (!request) {
                 requestStoragePermissions()
+                return@observe
             }else{
                 songsViewModel.fetchAndSaveMp3Files()
             }

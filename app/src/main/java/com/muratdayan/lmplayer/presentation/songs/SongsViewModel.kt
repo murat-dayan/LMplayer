@@ -116,26 +116,10 @@ class SongsViewModel @Inject constructor(
                     _songsState.value = SongsState(error = result.msg)
                 }
                 is Resource.Loading->{
-                    _songsState.value = SongsState(isLoading = true)
+                    //_songsState.value = SongsState(isLoading = true)
                 }
             }
         }.launchIn(viewModelScope)
     }
-
-   /* fun checkForNewSongs() {
-        viewModelScope.launch {
-            // Burada cihazdaki mevcut şarkıları alabilirsiniz
-            _songsState.value.songs?.let { currentSongs ->
-
-                // Örneğin, mevcut şarkı listesi ile önceki listeyi karşılaştırabilirsiniz
-                if (!songsList.containsAll(currentSongs)) {
-                    // Yeni şarkılar eklenmişse veya var olan şarkılar değişmişse işlem yapabilirsiniz
-                    fetchAndSaveMp3Files()
-                }
-            }
-        }
-    }*/
-
-
 }
 
